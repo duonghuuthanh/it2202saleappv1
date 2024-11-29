@@ -43,11 +43,16 @@ def add_user(name, username, password, avatar):
     db.session.commit()
 
 
-def auth_user(username, password):
+def auth_user(username, password, role=None):
     password = str(hashlib.md5(password.encode('utf-8')).hexdigest())
 
-    return User.query.filter(User.username.__eq__(username),
-                             User.password.__eq__(password)).first()
+    u = User.query.filter(User.username.__eq__(username),
+                          User.password.__eq__(password))
+
+    if role:
+        u = u.filter(User.user_role.__eq__(role))
+
+    return u.first()
 
 
 def get_user_by_id(id):

@@ -1,9 +1,13 @@
-{% extends 'layout/base.html' %}
+{% extends 'admin/master.html' %}
 
-{% block content %}
-<h1 class="text-center text-danger mt-1">ĐĂNG NHẬP NGƯỜI DÙNG</h1>
+{% block body %}
 
-<form method="post" action="/login">
+{% if current_user.is_authenticated %}
+<h1 class="text-success">CHÀO MỪNG ĐẾN TRANG QUẢN TRỊ ECOMMERCE</h1>
+<h2 class="text-secondary">Chào {{current_user.username}}!</h2>
+{% else %}
+<h1 class="text-center text-success mt-1">ĐĂNG NHẬP QUẢN TRỊ</h1>
+<form method="post" action="/login-admin">
 
     <div class="form-floating mb-3 mt-3">
       <input required type="text" class="form-control" id="username" placeholder="Họ tên" name="username">
@@ -18,4 +22,6 @@
         <button type="submit" class="btn btn-success">Đăng nhập</button>
     </div>
 </form>
+{% endif %}
+
 {% endblock %}

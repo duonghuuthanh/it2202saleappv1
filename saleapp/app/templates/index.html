@@ -1,14 +1,16 @@
 {% extends 'layout/base.html' %}
 
 {% block content %}
-<section>
-    <ul class="pagination mt-1">
-        {% for i in range(1, pages + 1) %}
-        <li class="page-item"><a class="page-link" href="/?page={{ i }}">{{ i }}</a></li>
-        {% endfor %}
-    </ul>
-</section>
+
 {% if products %}
+{% if pages > 1 %}
+<ul class="pagination mt-1">
+    {% for i in range(1, pages + 1) %}
+    <li class="page-item"><a class="page-link" href="/?page={{ i }}">{{ i }}</a></li>
+    {% endfor %}
+</ul>
+{% endif %}
+
 <div class="row">
     {% for p in products %}
     <div class="col-md-3 col-12 p-2">
@@ -18,7 +20,7 @@
                 <h4 class="card-title">{{ p.name }}</h4>
                 <p class="card-text">{{ p.price }} VNĐ</p>
                 <a href="#" class="btn btn-primary">Xem chi tiết</a>
-                <button class="btn btn-danger">Đặt hàng</button>
+                <button class="btn btn-danger" onclick="addToCart({{ p.id }}, '{{ p.name }}', {{ p.price }})">Đặt hàng</button>
             </div>
         </div>
     </div>
