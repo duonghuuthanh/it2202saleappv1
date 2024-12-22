@@ -1,11 +1,19 @@
-from app import app, db
+from app import app, db, dao
 from flask import redirect
-from flask_admin import Admin, BaseView, expose
+from flask_admin import Admin, BaseView, expose, AdminIndexView
 from flask_admin.contrib.sqla import ModelView
 from app.models import Category, Product, User, UserRole
 from flask_login import current_user, logout_user
 
-admin = Admin(app=app, name='eCommerceApp', template_mode='bootstrap4')
+
+class MyAdminIndexView(AdminIndexView):
+    @expose("/")
+    def index(self):
+
+        return self.render('admin/index.html', stats=dao.count_products_by_cate())
+
+
+admin = Admin(app=app, name='eCommerceApp', template_mode='bootstrap4', index_view=MyAdminIndexView())
 
 
 class AuthenticatedView(ModelView):
@@ -41,8 +49,9 @@ class LogoutView(AuthendicatedBaseView):
 class StatsView(AuthendicatedBaseView):
     @expose("/")
     def index(self):
-        # ...
-        return self.render('admin/stats.html')
+        return self.render('admin/stats.html',
+                           stats=dao.revenue_stats_by_products(),
+                           stats2=dao.revenue_stats_by_time())
 
 
 admin.add_view(CategoryView(Category, db.session))
